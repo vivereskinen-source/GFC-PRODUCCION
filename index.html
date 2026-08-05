@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#ffffff" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="GFC Producción" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="apple-touch-icon" href="icon-192.svg" />
+  <link rel="stylesheet" href="styles.css" />
+  <title>GFC Producción</title>
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <h1>GFC Producción</h1>
+      <p>Formulación, costos e historial de lotes</p>
+    </div>
+    <button id="backupBtn" class="secondary">Exportar respaldo</button>
+  </header>
+
+  <nav class="tabs" aria-label="Secciones">
+    <button class="tab active" data-view="dashboard">Inicio</button>
+    <button class="tab" data-view="materials">Materias primas</button>
+    <button class="tab" data-view="formulas">Fórmulas</button>
+    <button class="tab" data-view="production">Producción</button>
+    <button class="tab" data-view="history">Historial</button>
+  </nav>
+
+  <main>
+    <section id="dashboard" class="view active">
+      <div class="hero card">
+        <h2>Control de producción</h2>
+        <p>Registra materias primas, crea fórmulas, calcula lotes y conserva el costo histórico de cada producción.</p>
+      </div>
+      <div class="stats-grid">
+        <div class="card stat"><span>Materias primas</span><strong id="statMaterials">0</strong></div>
+        <div class="card stat"><span>Fórmulas</span><strong id="statFormulas">0</strong></div>
+        <div class="card stat"><span>Lotes registrados</span><strong id="statLots">0</strong></div>
+        <div class="card stat"><span>Último costo/kg</span><strong id="statLastCost">$0,00</strong></div>
+      </div>
+      <div class="card">
+        <h3>Acciones rápidas</h3>
+        <div class="quick-actions">
+          <button data-go="materials">Nueva materia prima</button>
+          <button data-go="formulas">Nueva fórmula</button>
+          <button data-go="production">Calcular producción</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="materials" class="view">
+      <div class="card">
+        <h2>Materias primas</h2>
+        <form id="materialForm" class="form-grid">
+          <input type="hidden" id="materialId" />
+          <label>Nombre
+            <input id="materialName" required placeholder="Ej. Sal refinada" />
+          </label>
+          <label>Precio por kilogramo (USD)
+            <input id="materialPrice" type="number" min="0" step="0.0001" required placeholder="0.0000" />
+          </label>
+          <label>Proveedor
+            <input id="materialSupplier" placeholder="Opcional" />
+          </label>
+          <label>Fecha del precio
+            <input id="materialPriceDate" type="date" required />
+          </label>
+          <div class="full actions">
+            <button type="submit">Guardar materia prima</button>
+            <button type="button" id="cancelMaterialEdit" class="secondary hidden">Cancelar edición</button>
+          </div>
+        </form>
+      </div>
+      <div class="card">
+        <div class="section-head">
+          <h3>Listado</h3>
+          <input id="materialSearch" placeholder="Buscar..." />
+        </div>
+        <div id="materialsList" class="list"></div>
+      </div>
+    </section>
+
+    <section id="formulas" class="view">
+      <div class="card">
+        <h2>Crear fórmula</h2>
+        <form id="formulaForm">
+          <input type="hidden" id="formulaId" />
+          <div class="form-grid">
+            <label>Nombre del producto
+              <input id="formulaName" required placeholder="Ej. Caldo de pollo" />
+            </label>
+            <label>Unidad base
+              <select id="formulaMode">
+                <option value="kg">Kilogramos</option>
+                <option value="percent">% del total</option>
+              </select>
+            </label>
+          </div>
+          <div class="section-head">
+            <h3>Ingredientes</h3>
+            <button type="button" id="addIngredientBtn" class="secondary">Agregar ingrediente</button>
+          </div>
+          <div id="ingredientsEditor"></div>
+          <div class="formula-total">
+            Total fórmula: <strong id="formulaTotal">0,0000</strong>
+            <span id="formulaTotalUnit">kg</span>
+          </div>
+          <div class="actions">
+            <button type="submit">Guardar fórmula</button>
+            <button type="button" id="cancelFormulaEdit" class="secondary hidden">Cancelar edición</button>
+          </div>
+        </form>
+      </div>
+      <div class="card">
+        <h3>Fórmulas guardadas</h3>
+        <div id="formulasList" class="list"></div>
+      </div>
+    </section>
+
+    <section id="production" class="view">
+      <div class="card">
+        <h2>Nueva producción</h2>
+        <form id="productionForm" class="form-grid">
+          <label>Fórmula
+            <select id="productionFormula" required></select>
+          </label>
+          <label>Cantidad final deseada (kg)
+            <input id="targetKg" type="number" min="0.001" step="0.001" required placeholder="100" />
+          </label>
+          <label>Fecha
+            <input id="productionDate" type="date" required />
+          </label>
+          <label>Responsable
+            <input id="productionResponsible" placeholder="Opcional" />
+          </label>
+          <label>Producción real obtenida (kg)
+            <input id="actualKg" type="number" min="0" step="0.001" placeholder="Opcional" />
+          </label>
+          <label>Otros costos del lote (USD)
+            <input id="extraCosts" type="number" min="0" step="0.01" value="0" />
+          </label>
+          <label class="full">Observaciones
+            <textarea id="productionNotes" rows="3" placeholder="Cambios, incidencias, calidad, merma..."></textarea>
+          </label>
+          <div class="full actions">
+            <button type="button" id="calculateBtn">Calcular</button>
+          </div>
+        </form>
+      </div>
+
+      <div id="calculationCard" class="card hidden">
+        <div class="section-head">
+          <h3>Resultado del lote</h3>
+          <span id="calculationFormulaName" class="badge"></span>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Ingrediente</th><th>Cantidad</th><th>Precio/kg</th><th>Costo</th></tr>
+            </thead>
+            <tbody id="calculationRows"></tbody>
+          </table>
+        </div>
+        <div class="summary-grid">
+          <div><span>Costo materias primas</span><strong id="materialsCost">$0,00</strong></div>
+          <div><span>Otros costos</span><strong id="extraCostSummary">$0,00</strong></div>
+          <div><span>Costo total</span><strong id="totalCost">$0,00</strong></div>
+          <div><span>Costo por kg</span><strong id="costPerKg">$0,00</strong></div>
+          <div><span>Merma</span><strong id="wastePercent">0,00%</strong></div>
+        </div>
+        <button id="saveLotBtn">Registrar lote definitivamente</button>
+      </div>
+    </section>
+
+    <section id="history" class="view">
+      <div class="card">
+        <div class="section-head">
+          <h2>Historial de producción</h2>
+          <input id="historySearch" placeholder="Buscar producto o lote..." />
+        </div>
+        <p class="muted">Los registros guardados no pueden editarse ni eliminarse desde la aplicación.</p>
+        <div id="historyList" class="list"></div>
+      </div>
+    </section>
+  </main>
+
+  <template id="ingredientRowTemplate">
+    <div class="ingredient-row">
+      <select class="ingredient-material" required></select>
+      <input class="ingredient-amount" type="number" min="0" step="0.0001" required placeholder="Cantidad" />
+      <button type="button" class="danger remove-ingredient">Quitar</button>
+    </div>
+  </template>
+
+  <script src="app.js"></script>
+</body>
+</html>
