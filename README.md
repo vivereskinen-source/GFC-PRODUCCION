@@ -1,35 +1,11 @@
-# GFC Producción
+# GFC Manager v1.1
 
-Aplicación web progresiva (PWA) para:
+Actualización compatible con los datos locales de la versión 1.0.
 
-- Registrar materias primas y precios por kilogramo.
-- Crear fórmulas en kilogramos o porcentajes.
-- Calcular cantidades según el peso final deseado.
-- Calcular costo total y costo por kilogramo.
-- Registrar lotes con fórmula, precios y costos congelados.
-- Conservar historial cerrado desde la interfaz.
-- Exportar un respaldo JSON.
+Incluye: clave local, panel ejecutivo, cantidad obtenida, merma, costo real/kg, catálogo de otros costos, asociación de fórmula con materia prima, consultas históricas, consumo diario estimado, próxima producción, reportes, CSV, impresión/PDF y logo provisional.
 
-## Cómo probarla
+## Actualización
+Sube todos los archivos de esta carpeta al nivel principal del repositorio GFC-PRODUCCION y confirma **Commit changes**. No crees otro repositorio ni cambies GitHub Pages.
 
-Necesita servirse desde un servidor web, no abrirse directamente como archivo.
-
-Una opción rápida en computadora:
-
-```bash
-python3 -m http.server 8000
-```
-
-Luego abrir `http://localhost:8000`.
-
-## Cómo instalarla en iPhone
-
-1. Publica la carpeta en un hosting HTTPS, por ejemplo GitHub Pages, Netlify o Vercel.
-2. Abre el enlace en Safari.
-3. Pulsa Compartir.
-4. Selecciona “Agregar a pantalla de inicio”.
-
-## Importante
-
-Los datos se guardan localmente en el navegador del dispositivo. Conviene usar “Exportar respaldo” con frecuencia.
-Para uso multiusuario o respaldo en la nube se necesita una segunda versión con base de datos y autenticación.
+## Advertencia
+Esta continúa siendo una versión de prueba pública en GitHub Pages. No introduzcas todavía fórmulas maestras confidenciales. La versión final se migrará a un sistema local aislado y cifrado.
