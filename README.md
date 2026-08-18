@@ -1,11 +1,20 @@
-# GFC Manager v1.1
+# GFC Manager v1.2
 
-Actualización compatible con los datos locales de la versión 1.0.
+Actualización compatible con los datos locales de la versión 1.1.
 
-Incluye: clave local, panel ejecutivo, cantidad obtenida, merma, costo real/kg, catálogo de otros costos, asociación de fórmula con materia prima, consultas históricas, consumo diario estimado, próxima producción, reportes, CSV, impresión/PDF y logo provisional.
+## Principales cambios
+- Otros costos con tarifa base, horas, minutos, personas o cantidad consumida.
+- Código de producto y nomenclatura de lote independiente.
+- Buscador de fórmulas.
+- Diferencial cambiario lineal para fórmulas y materias primas, sin alterar históricos.
+- Planificación con cálculo de materias primas y atajo a producción.
+- Sincronización del último costo real en Inicio y Fórmulas.
+- Top 3 y Bottom 3 por período.
+- Alertas dinámicas en cuenta regresiva y ordenadas por urgencia.
+- Exportación e importación de respaldos.
 
 ## Actualización
-Sube todos los archivos de esta carpeta al nivel principal del repositorio GFC-PRODUCCION y confirma **Commit changes**. No crees otro repositorio ni cambies GitHub Pages.
+Reemplaza todos los archivos de la raíz del repositorio por los incluidos en este ZIP.
 
-## Advertencia
-Esta continúa siendo una versión de prueba pública en GitHub Pages. No introduzcas todavía fórmulas maestras confidenciales. La versión final se migrará a un sistema local aislado y cifrado.
+## Seguridad
+Sigue siendo una versión de pruebas en GitHub Pages. No cargar fórmulas maestras confidenciales.

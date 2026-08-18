@@ -1,12 +1,107 @@
-<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#132018"><meta name="apple-mobile-web-app-capable" content="yes"><link rel="manifest" href="manifest.json"><link rel="apple-touch-icon" href="icon-192.png"><link rel="stylesheet" href="styles.css"><title>GFC Manager v1.1</title></head><body>
-<section id="login" class="login"><div class="login-card"><img src="logo-gfc.jpg" class="login-logo"><h1>GFC Manager</h1><p id="loginText">Configura una clave local.</p><form id="loginForm"><label>Clave<input id="password" type="password" minlength="6" required></label><label id="confirmLabel">Confirmar clave<input id="passwordConfirm" type="password"></label><button>Entrar</button></form><small>Protección local provisional. La versión final será aislada y cifrada.</small></div></section>
-<div id="app" class="hidden"><header><div class="brand"><img src="icon-192.png"><div><b>GFC Manager</b><span>Versión 1.1</span></div></div><div><button id="backupBtn" class="ghost">Respaldo</button><button id="lockBtn" class="ghost">Bloquear</button></div></header><nav><button data-view="home" class="active">Inicio</button><button data-view="materials">Materias primas</button><button data-view="formulas">Fórmulas</button><button data-view="concepts">Otros costos</button><button data-view="production">Producción</button><button data-view="history">Historial</button><button data-view="reports">Reportes</button></nav><main>
-<section id="home" class="view active"><div class="title"><div><h1>Panel ejecutivo</h1><p>Producción, costos y proyecciones.</p></div><img src="logo-gfc.jpg"></div><div class="kpis"><article><span>Kg este mes</span><strong id="monthKg">0</strong></article><article><span>Lotes este mes</span><strong id="monthLots">0</strong></article><article><span>Merma promedio</span><strong id="avgWaste">0%</strong></article><article><span>Más producido</span><strong id="topProduct">—</strong></article></div><div class="cols"><article class="card"><h2>Costos actuales</h2><div class="table"><table><thead><tr><th>Producto</th><th>Costo/kg</th><th>Última actualización</th></tr></thead><tbody id="homeCosts"></tbody></table></div></article><article class="card"><h2>Alertas</h2><div id="alerts" class="list"></div></article></div></section>
-<section id="materials" class="view"><div class="title"><div><h1>Materias primas</h1><p>Precios y proveedores.</p></div><img src="logo-gfc.jpg"></div><article class="card"><form id="materialForm" class="grid"><input id="materialId" type="hidden"><label>Nombre<input id="materialName" required></label><label>Precio por kg<input id="materialPrice" type="number" step="0.0001" min="0" required></label><label>Proveedor<input id="materialSupplier"></label><label>Fecha<input id="materialDate" type="date" required></label><div class="full actions"><button>Guardar</button><button type="button" id="cancelMaterial" class="secondary hidden">Cancelar</button></div></form></article><article class="card"><input id="materialSearch" placeholder="Buscar"><div id="materialsList" class="list"></div></article></section>
-<section id="formulas" class="view"><div class="title"><div><h1>Fórmulas</h1><p>Fórmulas en kg o porcentaje.</p></div><img src="logo-gfc.jpg"></div><article class="card"><form id="formulaForm"><input id="formulaId" type="hidden"><div class="grid"><label>Producto<input id="formulaName" required></label><label>Modo<select id="formulaMode"><option value="kg">Kilogramos</option><option value="percent">Porcentaje</option></select></label></div><div class="section-head"><h2>Ingredientes</h2><button type="button" id="addIngredient" class="secondary">Agregar</button></div><div id="ingredientRows"></div><div class="total">Total: <b id="formulaTotal">0,0000</b> <span id="formulaUnit">kg</span></div><label class="check"><input id="asMaterial" type="checkbox"> El producto resultante se utilizará también como materia prima</label><label id="linkedMaterialWrap" class="hidden">Materia prima en la que se convertirá<select id="linkedMaterial"></select></label><div class="actions"><button>Guardar fórmula</button><button type="button" id="cancelFormula" class="secondary hidden">Cancelar</button></div></form></article><article class="card"><div id="formulaList" class="list"></div></article></section>
-<section id="concepts" class="view"><div class="title"><div><h1>Otros costos</h1><p>Conceptos reutilizables.</p></div><img src="logo-gfc.jpg"></div><article class="card"><form id="conceptForm" class="inline"><input id="conceptName" required placeholder="Ej. Electricidad"><button>Agregar</button></form></article><article class="card"><div id="conceptList" class="list"></div></article></section>
-<section id="production" class="view"><div class="title"><div><h1>Nueva producción</h1><p>Cálculo, rendimiento y cierre del lote.</p></div><img src="logo-gfc.jpg"></div><article class="card"><div class="grid"><label>Fórmula<select id="prodFormula"></select></label><label>Cantidad formulada (kg)<input id="targetKg" type="number" step="0.001" min="0"></label><label>Fecha<input id="prodDate" type="date"></label><label>Responsable<input id="responsible"></label><label>Producción esperada<input id="expectedKg" readonly placeholder="Según histórico"></label><label>Cantidad realmente obtenida (kg)<input id="actualKg" type="number" step="0.001" min="0"></label><label class="full">Observaciones<textarea id="notes" rows="3"></textarea></label></div><div class="section-head"><h2>Otros costos</h2><button id="addCost" type="button" class="secondary">Agregar costo</button></div><div id="costRows"></div><button id="calculate">Calcular lote</button></article><article id="result" class="card hidden"><h2 id="resultTitle">Resultado</h2><div class="table"><table><thead><tr><th>Ingrediente</th><th>Kg</th><th>Precio/kg</th><th>Costo</th></tr></thead><tbody id="resultRows"></tbody></table></div><div class="summary"><div><span>Materias primas</span><b id="matCost">$0</b></div><div><span>Otros costos</span><b id="extraCost">$0</b></div><div><span>Costo total</span><b id="totalCost">$0</b></div><div><span>Costo real/kg</span><b id="realCost">$0</b></div><div><span>Merma</span><b id="waste">0</b></div><div><span>Próxima producción</span><b id="nextProd">Sin historial</b></div></div><button id="saveLot">Registrar lote definitivamente</button></article></section>
-<section id="history" class="view"><div class="title"><div><h1>Historial</h1><p>Lotes cerrados y producción acumulada.</p></div><img src="logo-gfc.jpg"></div><article class="card"><h2>Consulta por producto y período</h2><div class="grid"><label>Producto<select id="histProduct"></select></label><label>Desde<input id="histFrom" type="date"></label><label>Hasta<input id="histTo" type="date"></label><div class="actions end"><button id="histConsult" type="button">Consultar</button></div></div><div id="histSummary" class="summary hidden"></div></article><article class="card"><input id="historySearch" placeholder="Buscar lote o producto"><div id="historyList" class="list"></div></article></section>
-<section id="reports" class="view"><div class="title"><div><h1>Reportes</h1><p>Producción, costos y consumo.</p></div><img src="logo-gfc.jpg"></div><article class="card"><div class="grid"><label>Producto<select id="repProduct"></select></label><label>Desde<input id="repFrom" type="date"></label><label>Hasta<input id="repTo" type="date"></label><div class="actions end"><button id="generateReport" type="button">Generar</button></div></div><div class="actions"><button id="exportCsv" class="secondary" type="button">Exportar CSV</button><button id="printReport" class="secondary" type="button">Imprimir / PDF</button></div></article><article id="reportArea" class="card"><div id="reportSummary" class="summary"></div><h2>Consumo de materias primas</h2><div class="table"><table><thead><tr><th>Materia prima</th><th>Kg</th><th>Costo</th></tr></thead><tbody id="reportMaterials"></tbody></table></div><h2>Producción por producto</h2><div class="table"><table><thead><tr><th>Producto</th><th>Lotes</th><th>Kg reales</th><th>Costo total</th><th>Merma promedio</th></tr></thead><tbody id="reportProducts"></tbody></table></div></article></section>
-</main></div>
-<template id="ingredientTemplate"><div class="row"><select class="ingMat"></select><input class="ingAmount" type="number" step="0.0001" min="0" placeholder="Cantidad"><button type="button" class="danger remove">Quitar</button></div></template><template id="costTemplate"><div class="row cost-row"><select class="costConcept"></select><input class="costAmount" type="number" step="0.01" min="0" placeholder="Monto USD"><button type="button" class="danger remove">Quitar</button></div></template><script src="app.js"></script></body></html>
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#132018">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="GFC Manager">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icon-192.png">
+  <link rel="stylesheet" href="styles.css">
+  <title>GFC Manager v1.2</title>
+</head>
+<body>
+<section id="login" class="login">
+  <div class="login-card">
+    <img src="logo-gfc.jpg" alt="GFC" class="login-logo">
+    <h1>GFC Manager</h1>
+    <p id="loginText">Configura una clave local para este dispositivo.</p>
+    <form id="loginForm">
+      <label>Clave<input id="password" type="password" minlength="6" required></label>
+      <label id="confirmLabel">Confirmar clave<input id="passwordConfirm" type="password" minlength="6"></label>
+      <button>Entrar</button>
+    </form>
+    <small>Versión de pruebas. La versión definitiva será local, aislada y cifrada.</small>
+  </div>
+</section>
+
+<div id="app" class="hidden">
+<header>
+  <div class="brand"><img src="icon-192.png"><div><b>GFC Manager</b><span>Versión 1.2</span></div></div>
+  <div class="header-actions"><button id="backupBtn" class="ghost">Exportar</button><button id="importBtn" class="ghost">Importar</button><input id="importFile" type="file" accept="application/json" class="hidden"><button id="lockBtn" class="ghost">Bloquear</button></div>
+</header>
+<nav>
+  <button data-view="home" class="active">Inicio</button>
+  <button data-view="materials">Materias primas</button>
+  <button data-view="formulas">Fórmulas</button>
+  <button data-view="concepts">Otros costos</button>
+  <button data-view="planning">Planificación</button>
+  <button data-view="production">Producción</button>
+  <button data-view="fx">Diferencial</button>
+  <button data-view="history">Historial</button>
+  <button data-view="reports">Reportes</button>
+</nav>
+<main>
+<section id="home" class="view active">
+  <div class="title"><div><h1>Panel ejecutivo</h1><p>Producción, costos y alertas.</p></div><img src="logo-gfc.jpg"></div>
+  <div class="kpis"><article><span>Kg este mes</span><strong id="monthKg">0</strong></article><article><span>Lotes este mes</span><strong id="monthLots">0</strong></article><article><span>Merma promedio</span><strong id="avgWaste">0%</strong></article><article><span>Más producido</span><strong id="topProduct">—</strong></article></div>
+  <article class="card period-card"><label>Período para ranking<select id="rankingPeriod"><option value="30">Últimos 30 días</option><option value="week">Esta semana</option><option value="month">Este mes</option><option value="year">Este año</option><option value="all">Todo el histórico</option></select></label></article>
+  <div class="cols"><article class="card"><h2>Costos actuales</h2><div class="table"><table><thead><tr><th>Producto</th><th>Costo real/kg</th><th>Última actualización</th></tr></thead><tbody id="homeCosts"></tbody></table></div></article><article class="card"><h2>Alertas de producción</h2><div id="alerts" class="list"></div></article></div>
+  <div class="cols"><article class="card"><h2>3 más fabricados</h2><div id="top3" class="ranking"></div></article><article class="card"><h2>3 menos fabricados</h2><div id="bottom3" class="ranking"></div></article></div>
+</section>
+
+<section id="materials" class="view">
+  <div class="title"><div><h1>Materias primas</h1><p>Precios, proveedores y actualización.</p></div><img src="logo-gfc.jpg"></div>
+  <article class="card"><form id="materialForm" class="grid"><input id="materialId" type="hidden"><label>Nombre<input id="materialName" required></label><label>Precio por kg<input id="materialPrice" type="number" min="0" step="0.0001" required></label><label>Proveedor<input id="materialSupplier"></label><label>Fecha del precio<input id="materialDate" type="date" required></label><div class="full actions"><button>Guardar</button><button type="button" id="cancelMaterial" class="secondary hidden">Cancelar</button></div></form></article>
+  <article class="card"><input id="materialSearch" placeholder="Buscar materia prima"><div id="materialsList" class="list"></div></article>
+</section>
+
+<section id="formulas" class="view">
+  <div class="title"><div><h1>Fórmulas</h1><p>Productos, códigos y fórmulas.</p></div><img src="logo-gfc.jpg"></div>
+  <article class="card"><form id="formulaForm"><input id="formulaId" type="hidden"><div class="grid"><label>Producto<input id="formulaName" required></label><label>Código de lote (2–5 caracteres)<input id="formulaCode" maxlength="5" pattern="[A-Za-z0-9]{2,5}" required placeholder="CP"></label><label>Modo<select id="formulaMode"><option value="kg">Kilogramos</option><option value="percent">Porcentaje</option></select></label></div><div class="section-head"><h2>Ingredientes</h2><button type="button" id="addIngredient" class="secondary">Agregar</button></div><div id="ingredientRows"></div><div class="total">Total: <b id="formulaTotal">0,0000</b> <span id="formulaUnit">kg</span></div><label class="check"><input id="asMaterial" type="checkbox"> El producto resultante también se utilizará como materia prima</label><label id="linkedMaterialWrap" class="hidden">Materia prima en la que se convertirá<select id="linkedMaterial"></select></label><div class="actions"><button>Guardar fórmula</button><button type="button" id="cancelFormula" class="secondary hidden">Cancelar</button></div></form></article>
+  <article class="card"><input id="formulaSearch" placeholder="Buscar fórmula por nombre o código"><div id="formulaList" class="list"></div></article>
+</section>
+
+<section id="concepts" class="view">
+  <div class="title"><div><h1>Otros costos</h1><p>Tarifas editables para reducir cálculos manuales.</p></div><img src="logo-gfc.jpg"></div>
+  <article class="card"><form id="conceptForm" class="grid"><input id="conceptId" type="hidden"><label>Concepto<input id="conceptName" required placeholder="Ej. Obreros"></label><label>Tipo de cálculo<select id="conceptType"><option value="fixed">Monto fijo</option><option value="hour">Tarifa por hora</option><option value="person_hour">Tarifa por persona/hora</option><option value="quantity">Tarifa por unidad</option></select></label><label>Tarifa base (USD)<input id="conceptRate" type="number" min="0" step="0.0001" required></label><label>Nombre de unidad<input id="conceptUnit" placeholder="Ej. viaje, kg, uso"></label><div class="full actions"><button>Guardar concepto</button><button id="cancelConcept" type="button" class="secondary hidden">Cancelar</button></div></form></article>
+  <article class="card"><div id="conceptList" class="list"></div></article>
+</section>
+
+<section id="planning" class="view">
+  <div class="title"><div><h1>Planificación</h1><p>Calcula necesidades sin crear todavía un lote.</p></div><img src="logo-gfc.jpg"></div>
+  <article class="card"><div class="grid"><label>Producto<select id="planFormula"></select></label><label>Kg deseados<input id="planKg" type="number" min="0.001" step="0.001"></label><label>Fecha prevista<input id="planDate" type="date"></label><label>Nota<input id="planNote"></label></div><div class="actions top-gap"><button id="calculatePlan" type="button">Calcular planificación</button><button id="savePlan" type="button" class="secondary">Guardar planificación</button></div></article>
+  <article id="planResult" class="card hidden"><h2>Materias primas necesarias</h2><div class="table"><table><thead><tr><th>Materia prima</th><th>Kg</th><th>Costo estimado</th></tr></thead><tbody id="planRows"></tbody></table></div><div class="summary"><div><span>Costo estimado</span><b id="planCost">$0</b></div><div><span>Costo estimado/kg</span><b id="planCostKg">$0</b></div></div><button id="planToProduction" type="button">Pasar a producción</button></article>
+  <article class="card"><h2>Planificaciones pendientes</h2><div id="plansList" class="list"></div></article>
+</section>
+
+<section id="production" class="view">
+  <div class="title"><div><h1>Nueva producción</h1><p>Producción directa o desde una planificación.</p></div><img src="logo-gfc.jpg"></div>
+  <article class="card"><div class="grid"><label>Fórmula<select id="prodFormula"></select></label><label>Cantidad formulada (kg)<input id="targetKg" type="number" min="0.001" step="0.001"></label><label>Fecha<input id="prodDate" type="date"></label><label>Responsable<input id="responsible"></label><label>Producción esperada<input id="expectedKg" readonly placeholder="Según histórico"></label><label>Cantidad realmente obtenida (kg)<input id="actualKg" type="number" min="0" step="0.001"></label><label class="full">Observaciones<textarea id="notes" rows="3"></textarea></label></div><div class="section-head"><h2>Otros costos del lote</h2><button id="addCost" type="button" class="secondary">Agregar costo</button></div><div id="costRows"></div><button id="calculate" type="button">Calcular lote</button></article>
+  <article id="result" class="card hidden"><h2 id="resultTitle">Resultado</h2><div class="table"><table><thead><tr><th>Ingrediente</th><th>Kg</th><th>Precio/kg</th><th>Costo</th></tr></thead><tbody id="resultRows"></tbody></table></div><div class="summary"><div><span>Materias primas</span><b id="matCost">$0</b></div><div><span>Otros costos</span><b id="extraCost">$0</b></div><div><span>Costo total</span><b id="totalCost">$0</b></div><div><span>Costo real/kg</span><b id="realCost">$0</b></div><div><span>Merma</span><b id="waste">0</b></div><div><span>Duración estimada del lote</span><b id="nextProd">Sin historial</b></div></div><button id="saveLot" type="button">Registrar lote definitivamente</button></article>
+</section>
+
+<section id="fx" class="view">
+  <div class="title"><div><h1>Diferencial cambiario</h1><p>Ajuste lineal independiente del histórico.</p></div><img src="logo-gfc.jpg"></div>
+  <article class="card"><div class="grid"><label>Diferencial general de fórmulas (%)<input id="globalFormulaFx" type="number" step="0.01"></label><label>Diferencial general de materias primas (%)<input id="globalMaterialFx" type="number" step="0.01"></label></div><button id="saveGlobalFx" type="button">Aplicar diferenciales generales</button></article>
+  <article class="card"><div class="subtabs"><button class="subtab active" data-fx="formulas">Fórmulas</button><button class="subtab" data-fx="materials">Materias primas</button></div><div id="fxFormulas"><div class="table"><table><thead><tr><th>Producto</th><th>Base</th><th>% individual</th><th>Ajustado</th></tr></thead><tbody id="fxFormulaRows"></tbody></table></div></div><div id="fxMaterials" class="hidden"><div class="table"><table><thead><tr><th>Materia prima</th><th>Base</th><th>% individual</th><th>Ajustado</th></tr></thead><tbody id="fxMaterialRows"></tbody></table></div></div></article>
+</section>
+
+<section id="history" class="view">
+  <div class="title"><div><h1>Historial</h1><p>Lotes cerrados y consultas acumuladas.</p></div><img src="logo-gfc.jpg"></div>
+  <article class="card"><h2>Consulta por producto y período</h2><div class="grid"><label>Producto<select id="histProduct"></select></label><label>Desde<input id="histFrom" type="date"></label><label>Hasta<input id="histTo" type="date"></label><div class="actions end"><button id="histConsult" type="button">Consultar</button></div></div><div id="histSummary" class="summary hidden"></div></article>
+  <article class="card"><input id="historySearch" placeholder="Buscar lote o producto"><div id="historyList" class="list"></div></article>
+</section>
+
+<section id="reports" class="view">
+  <div class="title"><div><h1>Reportes</h1><p>Producción, costos, rendimiento y consumo.</p></div><img src="logo-gfc.jpg"></div>
+  <article class="card"><div class="grid"><label>Producto<select id="repProduct"></select></label><label>Desde<input id="repFrom" type="date"></label><label>Hasta<input id="repTo" type="date"></label><div class="actions end"><button id="generateReport" type="button">Generar</button></div></div><div class="actions top-gap"><button id="exportCsv" class="secondary" type="button">Exportar CSV</button><button id="printReport" class="secondary" type="button">Imprimir / PDF</button></div></article>
+  <article id="reportArea" class="card"><div id="reportSummary" class="summary"></div><h2>Consumo de materias primas</h2><div class="table"><table><thead><tr><th>Materia prima</th><th>Kg</th><th>Costo</th></tr></thead><tbody id="reportMaterials"></tbody></table></div><h2>Producción por producto</h2><div class="table"><table><thead><tr><th>Producto</th><th>Lotes</th><th>Kg reales</th><th>Costo total</th><th>Merma promedio</th></tr></thead><tbody id="reportProducts"></tbody></table></div></article>
+</section>
+</main>
+</div>
+<template id="ingredientTemplate"><div class="row"><select class="ingMat"></select><input class="ingAmount" type="number" min="0" step="0.0001" placeholder="Cantidad"><button type="button" class="danger remove">Quitar</button></div></template>
+<template id="costTemplate"><div class="cost-box"><div class="row"><select class="costConcept"></select><input class="costResult" readonly placeholder="Costo calculado"><button type="button" class="danger remove">Quitar</button></div><div class="cost-inputs"></div></div></template>
+<script src="app.js"></script>
+</body></html>
