@@ -1,20 +1,10 @@
-# GFC Manager v1.2
+# GFC Manager v1.3
+Actualización integral de planificación, producción, costos, ventas, reportes y experiencia de uso.
 
-Actualización compatible con los datos locales de la versión 1.1.
+## Actualización desde v1.2
+Reemplace los archivos del sitio por los de este paquete. La aplicación conserva la clave de almacenamiento `gfc_produccion_db_v1` y migra los datos existentes al abrirse.
 
-## Principales cambios
-- Otros costos con tarifa base, horas, minutos, personas o cantidad consumida.
-- Código de producto y nomenclatura de lote independiente.
-- Buscador de fórmulas.
-- Diferencial cambiario lineal para fórmulas y materias primas, sin alterar históricos.
-- Planificación con cálculo de materias primas y atajo a producción.
-- Sincronización del último costo real en Inicio y Fórmulas.
-- Top 3 y Bottom 3 por período.
-- Alertas dinámicas en cuenta regresiva y ordenadas por urgencia.
-- Exportación e importación de respaldos.
-
-## Actualización
-Reemplaza todos los archivos de la raíz del repositorio por los incluidos en este ZIP.
+Antes de actualizar se recomienda exportar un respaldo JSON desde v1.2.
 
 ## Seguridad
-Sigue siendo una versión de pruebas en GitHub Pages. No cargar fórmulas maestras confidenciales.
+Esta sigue siendo una versión de pruebas alojable como PWA. La clave local no sustituye el cifrado de la versión definitiva. No cargar fórmulas confidenciales en un entorno público de pruebas.
