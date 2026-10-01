@@ -8,3 +8,9 @@ Antes de actualizar se recomienda exportar un respaldo JSON desde v1.2.
 
 ## Seguridad
 Esta sigue siendo una versión de pruebas alojable como PWA. La clave local no sustituye el cifrado de la versión definitiva. No cargar fórmulas confidenciales en un entorno público de pruebas.
+
+
+## v1.3.1
+- Persistencia reforzada con validación y respaldo automático local.
+- Recuperación desde respaldo local si la base principal no puede leerse.
+- Materias primas disponibles en Ventas y selección para incluir/excluir de la lista de precios.
