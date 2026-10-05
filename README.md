@@ -1,16 +1,11 @@
-# GFC Manager v1.3
-Actualización integral de planificación, producción, costos, ventas, reportes y experiencia de uso.
+# GFC Manager v1.3.2 — corrección de estabilidad
 
-## Actualización desde v1.2
-Reemplace los archivos del sitio por los de este paquete. La aplicación conserva la clave de almacenamiento `gfc_produccion_db_v1` y migra los datos existentes al abrirse.
+Corrección crítica de arranque y persistencia de datos.
 
-Antes de actualizar se recomienda exportar un respaldo JSON desde v1.2.
+- Corrige el orden de inicialización que podía impedir que la aplicación arrancara o hacer que una base existente se interpretara como vacía al recargar.
+- Mantiene la misma clave de base de datos (`gfc_produccion_db_v1`) para conservar compatibilidad.
+- Conserva respaldo local automático (`gfc_produccion_db_v1_backup`) y validación de escritura.
+- Mantiene materias primas en Ventas con selección para incluir/excluir en la lista de precios.
+- Actualiza la caché PWA a v1.3.2.
 
-## Seguridad
-Esta sigue siendo una versión de pruebas alojable como PWA. La clave local no sustituye el cifrado de la versión definitiva. No cargar fórmulas confidenciales en un entorno público de pruebas.
-
-
-## v1.3.1
-- Persistencia reforzada con validación y respaldo automático local.
-- Recuperación desde respaldo local si la base principal no puede leerse.
-- Materias primas disponibles en Ventas y selección para incluir/excluir de la lista de precios.
+Antes de uso real, validar persistencia con datos ficticios: guardar, F5, cerrar pestaña y volver a abrir.
