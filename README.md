@@ -9,3 +9,6 @@ Corrección crítica de arranque y persistencia de datos.
 - Actualiza la caché PWA a v1.3.2.
 
 Antes de uso real, validar persistencia con datos ficticios: guardar, F5, cerrar pestaña y volver a abrir.
+
+
+v1.3.3: menú lateral adaptable, selección por casillas en Reportes y lista de precios imprimible independiente sin información interna. No cambia las claves de almacenamiento.
